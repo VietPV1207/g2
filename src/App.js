@@ -21,7 +21,6 @@ import InventoryManagement from './pages/InventoryManagement';
 import VoucherList from './pages/voucher/VoucherList';
 import OrderConfirmation from './pages/OrderConfirmation';
 import OrderStatusUpdate from './pages/OrderStatusUpdate';
-import ProductReviews from './pages/ProductReviews';
 import Feedback from './pages/Feedback';
 import SalesReport from './pages/SalesReport';
 import ComplaintManagement from './pages/ComplaintManagement';
@@ -80,7 +79,6 @@ function App() {
             <Route path="order-status" element={<OrderStatusUpdate />} />
 
             {/* Phản hồi & đánh giá */}
-            <Route path="product-reviews" element={<ProductReviews />} />
             <Route path="feedback" element={<Feedback />} />
 
             {/* Báo cáo doanh số */}

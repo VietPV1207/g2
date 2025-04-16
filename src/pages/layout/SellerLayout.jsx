@@ -22,7 +22,7 @@ const SellerLayout = () => {
     { path: '/order-confirmation', icon: '🛒', label: 'Quản lý đơn hàng' },
     { path: '/voucher-management', icon: '🏷️', label: 'Quản lý voucher' },
     { path: '/inventory-management', icon: '📋', label: 'Quản lý kho hàng' },
-    { path: '/product-reviews', icon: '⭐', label: 'Đánh giá sản phẩm' },
+    { path: '/feedback', icon: '⭐', label: 'Đánh giá sản phẩm' },
     { path: '/sales-report', icon: '📈', label: 'Báo cáo doanh số' },
     { path: '/store-profile', icon: '🏪', label: 'Hồ sơ cửa hàng' },
     { path: '/', icon: '🏠', label: 'Về trang chủ' },
@@ -42,7 +42,7 @@ const SellerLayout = () => {
       return 'Quản lý Voucher';
     }
     if (path.includes('inventory-management')) return 'Quản lý kho hàng';
-    if (path.includes('product-reviews')) return 'Đánh giá sản phẩm';
+    if (path.includes('feedback')) return 'Đánh giá sản phẩm';
     if (path.includes('sales-report')) return 'Báo cáo doanh số';
     if (path.includes('store-profile')) return 'Hồ sơ cửa hàng';
     return 'Kênh người bán';
