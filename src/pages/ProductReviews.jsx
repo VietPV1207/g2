@@ -1,6 +1,6 @@
-// src/pages/Feedback.js
 import React, { useState, useEffect } from 'react';
 import { Container, Card, Button, Form, Row, Col } from 'react-bootstrap';
+import axios from 'axios';
 
 const Feedback = () => {
   const [reviews, setReviews] = useState([]);
@@ -39,17 +39,27 @@ const Feedback = () => {
     }));
   };
 
-  // Khi nhấn "Gửi phản hồi", cập nhật seller_response của review và ẩn ô nhập
-  const handleSubmitResponse = (reviewId) => {
+ // Khi nhấn "Gửi phản hồi", cập nhật seller_response của review trong database.json
+ const handleSubmitResponse = async (reviewId) => {
+  try {
+    // Gửi PATCH request cập nhật seller_response của review lên server
+    const response = await axios.patch(`http://localhost:9999/reviews/${reviewId}`, {
+      seller_response: editingResponse[reviewId]
+    });
+    // Giả sử response.data chứa review đã được cập nhật từ server
+    const updatedReview = response.data;
+
+    // Cập nhật lại state reviews
     const updatedReviews = reviews.map(review =>
-      review.review_id === reviewId
-        ? { ...review, seller_response: editingResponse[reviewId] }
-        : review
+      review.review_id === reviewId ? updatedReview : review
     );
     setReviews(updatedReviews);
     setEditingReview(prev => ({ ...prev, [reviewId]: false }));
     setEditingResponse(prev => ({ ...prev, [reviewId]: '' }));
-  };
+  } catch (err) {
+    console.error('Error updating review in DB:', err);
+  }
+};
 
   // Toggle hiển thị ô textarea để trả lời hoặc chỉnh sửa phản hồi
   const handleToggleEdit = (reviewId) => {
