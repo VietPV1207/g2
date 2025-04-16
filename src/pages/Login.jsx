@@ -10,6 +10,8 @@ const Login = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
 
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg("");
@@ -45,13 +47,55 @@ const Login = () => {
       // Chuyển hướng dựa theo role của người dùng
       if (foundUser.role === "seller") {
         navigate("/voucher-management");
-      } else if (foundUser.role === "admin") {
-        navigate("/admin-dashboard");
       } else {
         setErrorMsg("Bạn không có quyền truy cập!");
       }
     } catch (error) {
       console.error("Error during login:", error);
+      setErrorMsg("Có lỗi xảy ra, vui lòng thử lại sau!");
+    }
+  };
+
+
+  // Hàm đăng nhập tự động với thông tin mặc định của seller
+  const handleLoginAsSeller = async () => {
+    // Thay đổi thông tin mặc định theo dữ liệu có trong hệ thống của bạn
+    const sellerEmail = "user3@gmail.com";
+    const sellerPassword = "123123";
+    setErrorMsg("");
+
+    try {
+      const response = await fetch("http://localhost:9999/user");
+      if (!response.ok) {
+        throw new Error("Network response was not OK");
+      }
+      const users = await response.json();
+
+      // Tìm kiếm người dùng với thông tin seller mặc định
+      const foundUser = users.find(
+        (user) => user.email === sellerEmail && user.password === sellerPassword
+      );
+
+      if (!foundUser) {
+        setErrorMsg("Seller user không tồn tại!");
+        return;
+      }
+
+      if (foundUser.action === "lock") {
+        setErrorMsg("Tài khoản của Seller đã bị khóa!");
+        return;
+      }
+
+      setUser(foundUser);
+      localStorage.setItem("user", JSON.stringify(foundUser));
+
+      if (foundUser.role === "seller") {
+        navigate("/voucher-management");
+      } else {
+        setErrorMsg("Bạn không có quyền truy cập!");
+      }
+    } catch (error) {
+      console.error("Error during login as seller:", error);
       setErrorMsg("Có lỗi xảy ra, vui lòng thử lại sau!");
     }
   };
@@ -87,6 +131,10 @@ const Login = () => {
           Đăng nhập
         </button>
       </form>
+      <hr style={{ margin: "20px 0" }} />
+      <button onClick={handleLoginAsSeller} style={styles.button}>
+        Login as Seller
+      </button>
     </div>
   );
 };

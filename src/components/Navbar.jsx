@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useUser } from '../pages/UserContext';
+import guestAva from '../assets/avatar/guestava.jpg'; 
+import Dropdown from 'react-bootstrap/Dropdown';
+import Image from 'react-bootstrap/Image';
+
 
 const Navbar = () => {
     const { user, setUser } = useUser();
@@ -48,82 +52,39 @@ const Navbar = () => {
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/about">
-                                About
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/contact">
-                                Contact
+                            <Link className="nav-link" to="/seller-dashboard">
+                                Seller Dashboard
                             </Link>
                         </li>
                     </ul>
                     {/* Right side: Conditional rendering */}
                     {user ? (
                         // Nếu đăng nhập, hiển thị dropdown với avatar của tài khoản
-                        <ul className="navbar-nav">
-                            <li className="nav-item dropdown">
-                                <a
-                                    className="nav-link dropdown-toggle"
-                                    href="#!"
-                                    role="button"
-                                    data-bs-toggle="dropdown"
-                                    aria-expanded="false"
-                                >
-                                    <img
-                                        src={user.image}
-                                        alt="User Avatar"
-                                        className="rounded-circle"
-                                        style={{ width: "30px", height: "30px", objectFit: "cover" }}
-                                    />
-                                </a>
-                                <ul className="dropdown-menu dropdown-menu-end">
-                                    <li>
-                                        <label className='dropdown-item text-danger'>
-                                            {user.fullName}
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <Link className="dropdown-item" to="/cart">
-                                            Cart
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link className="dropdown-item" to="/profile">
-                                            Profile
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link className="dropdown-item" to="/change-password">
-                                            Change Password
-                                        </Link>
-                                    </li>
-                                    {/* Add Inventory and Voucher Management links for admin only */}
-                                    {user.role === 'seller' && (
-                                        <>
-                                            <li>
-                                                <Link className="dropdown-item" to="/inventory">
-                                                    Inventory Management
-                                                </Link>
-                                            </li>
-                                            <li>
-                                                <Link className="dropdown-item" to="/vouchers">
-                                                    Voucher Management
-                                                </Link>
-                                            </li>
-                                        </>
-                                    )}
-                                    <li>
-                                        <hr className="dropdown-divider" />
-                                    </li>
-                                    <li>
-                                        <button className="dropdown-item" onClick={handleLogout}>
-                                            Logout
-                                        </button>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
+                        <Dropdown>
+                        <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                          <Image
+                            src={guestAva}
+                            alt="User Avatar"
+                            roundedCircle
+                            style={{ width: "30px", height: "30px", objectFit: "cover" }}
+                          />
+                        </Dropdown.Toggle>
+                    
+                        <Dropdown.Menu align="end">
+                          <Dropdown.ItemText>{user.fullName}</Dropdown.ItemText>
+                          <Dropdown.Item href="/cart">Cart</Dropdown.Item>
+                          <Dropdown.Item href="/profile">Profile</Dropdown.Item>
+                          <Dropdown.Item href="/change-password">Change Password</Dropdown.Item>
+                          {user.role === 'seller' && (
+                            <>
+                              <Dropdown.Item href="/inventory">Inventory Management</Dropdown.Item>
+                              <Dropdown.Item href="/vouchers">Voucher Management</Dropdown.Item>
+                            </>
+                          )}
+                          <Dropdown.Divider />
+                          <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
                     ) : (
                         // Nếu chưa đăng nhập, hiển thị link Login
                         <div className="d-flex">

@@ -9,7 +9,8 @@ const SellerLayout = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   // Xử lý đăng xuất
-  const handleLogout = () => {
+  const handleLogout = (e) => {
+    e.preventDefault();
     localStorage.removeItem('user');
     navigate('/login');
   };
