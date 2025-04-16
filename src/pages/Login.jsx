@@ -44,7 +44,7 @@ const Login = () => {
 
       // Chuyển hướng dựa theo role của người dùng
       if (foundUser.role === "seller") {
-        navigate("/seller-dashboard");
+        navigate("/voucher-management");
       } else if (foundUser.role === "admin") {
         navigate("/admin-dashboard");
       } else {

@@ -1404,55 +1404,36 @@
       "isWinningBid": true
     }
   ],
-  "vouchers": [
+  "voucher": [
     {
-      "id": "voucher_2",
-      "productId": "2",
-      "voucherCode": "SUMMER25",
-      "discountPercentage": 25,
-      "expiryDate": "2025-08-01"
+      "id": 1,
+      "code": "SUMMER2023",
+      "name": "Khuyến mãi mùa hè",
+      "discountType": "percentage",
+      "discountValue": 15,
+      "startDate": "2023-06-01",
+      "endDate": "2023-08-31",
+      "isActive": true
     },
     {
-      "id": "voucher_3",
-      "productId": "3",
-      "voucherCode": "HALFOFF",
-      "discountPercentage": 50,
-      "expiryDate": "2025-09-01"
+      "id": 2,
+      "code": "WELCOME50",
+      "name": "Chào mừng thành viên mới",
+      "discountType": "fixed",
+      "discountValue": 50000,
+      "startDate": "2023-01-01",
+      "endDate": "2023-12-31",
+      "isActive": true
     },
     {
-      "id": "voucher_4",
-      "productId": "4",
-      "voucherCode": "DISC55",
-      "discountPercentage": 55,
-      "expiryDate": "2025-10-01"
-    },
-    {
-      "id": "voucher_5",
-      "productId": "5",
-      "voucherCode": "BIGSAVE70",
-      "discountPercentage": 70,
-      "expiryDate": "2025-11-01"
-    },
-    {
-      "id": "voucher_6",
-      "productId": "9",
-      "voucherCode": "HOTDEAL75",
-      "discountPercentage": 75,
-      "expiryDate": "2025-12-01"
-    },
-    {
-      "id": "voucher_8",
-      "productId": "8",
-      "voucherCode": "SUPER90",
-      "discountPercentage": 90,
-      "expiryDate": "2026-01-01"
-    },
-    {
-      "productId": "1",
-      "discountPercentage": 20,
-      "voucherCode": "SAVE20",
-      "expiryDate": "2025-04-30",
-      "id": "voucher_7"
+      "id": null,
+      "code": "ád",
+      "name": "sda",
+      "discountType": "percentage",
+      "discountValue": 12,
+      "startDate": "2025-04-12",
+      "endDate": "2025-04-19",
+      "isActive": true
     }
   ]
 }
