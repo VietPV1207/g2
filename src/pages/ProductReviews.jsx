@@ -1,13 +1,12 @@
 // src/pages/Feedback.js
 import React, { useState, useEffect } from 'react';
-import { Container, Card, Button, Form } from 'react-bootstrap';
+import { Container, Card, Button, Form, Row, Col } from 'react-bootstrap';
 
-const ProductReviews = () => {
+const Feedback = () => {
   const [reviews, setReviews] = useState([]);
-  // State lưu trữ giá trị phản hồi đang chỉnh sửa cho từng review (key theo review_id)
   const [editingResponse, setEditingResponse] = useState({});
-  // State để xác định review nào đang được chỉnh sửa (hiển thị ô textarea)
   const [editingReview, setEditingReview] = useState({});
+  const [filterOption, setFilterOption] = useState('all'); // 'all', 'answered', 'unanswered'
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -32,7 +31,7 @@ const ProductReviews = () => {
     fetchReviews();
   }, []);
 
-  // Xử lý thay đổi phản hồi trong ô textarea
+  // Xử lý thay đổi nội dung phản hồi trong ô textarea
   const handleResponseChange = (reviewId, value) => {
     setEditingResponse(prev => ({
       ...prev,
@@ -52,13 +51,23 @@ const ProductReviews = () => {
     setEditingResponse(prev => ({ ...prev, [reviewId]: '' }));
   };
 
-  // Xử lý toggle hiển thị ô textarea để trả lời review
+  // Toggle hiển thị ô textarea để trả lời hoặc chỉnh sửa phản hồi
   const handleToggleEdit = (reviewId) => {
     setEditingReview(prev => ({
       ...prev,
       [reviewId]: !prev[reviewId]
     }));
   };
+
+  // Lọc reviews dựa vào tùy chọn lọc
+  const filteredReviews = reviews.filter(review => {
+    if (filterOption === 'answered') {
+      return review.seller_response && review.seller_response.trim().length > 0;
+    } else if (filterOption === 'unanswered') {
+      return !review.seller_response || review.seller_response.trim().length === 0;
+    }
+    return true; // all
+  });
 
   if (loading) {
     return (
@@ -78,9 +87,24 @@ const ProductReviews = () => {
 
   return (
     <Container className="mt-4">
-      <h2 className="mb-4">Feedback & Reviews</h2>
-      {reviews?.length > 0 ? (
-        reviews.map((review) => (
+      <Row className="align-items-center mb-4">
+        <Col>
+          <h2>Feedback & Reviews</h2>
+        </Col>
+        <Col md="auto">
+          <Form.Select
+            value={filterOption}
+            onChange={(e) => setFilterOption(e.target.value)}
+          >
+            <option value="all">All</option>
+            <option value="answered">Đã trả lời</option>
+            <option value="unanswered">Chưa trả lời</option>
+          </Form.Select>
+        </Col>
+      </Row>
+
+      {filteredReviews?.length > 0 ? (
+        filteredReviews.map((review) => (
           <Card className="mb-3" key={review.review_id}>
             <Card.Header>
               <div className="d-flex justify-content-between">
@@ -99,15 +123,21 @@ const ProductReviews = () => {
                 <strong>Review:</strong> {review.comment} <br />
                 <strong>Seller Response:</strong> {review.seller_response || "Chưa có phản hồi."}
               </Card.Text>
-              {/* Hiển thị nút "Trả lời" nếu review chưa có phản hồi và chưa được mở ô trả lời */}
+              {/* Nút "Trả lời" hiển thị nếu chưa có phản hồi và không đang edit */}
               {!review.seller_response && !editingReview[review.review_id] && (
                 <Button variant="secondary" onClick={() => handleToggleEdit(review.review_id)}>
                   Trả lời
                 </Button>
               )}
-              {/* Nếu đang chỉnh sửa review, hiện textarea và các nút xử lý */}
+              {/* Nút "Sửa phản hồi" hiển thị nếu đã có phản hồi và không đang edit */}
+              {review.seller_response && !editingReview[review.review_id] && (
+                <Button variant="outline-primary" onClick={() => handleToggleEdit(review.review_id)}>
+                  Sửa phản hồi
+                </Button>
+              )}
+              {/* Hiển thị ô textarea nếu đang ở chế độ chỉnh sửa */}
               {editingReview[review.review_id] && (
-                <Form>
+                <Form className="mt-2">
                   <Form.Group controlId={`response-${review.review_id}`}>
                     <Form.Control
                       as="textarea"
@@ -137,4 +167,4 @@ const ProductReviews = () => {
   );
 };
 
-export default ProductReviews;
+export default Feedback;
