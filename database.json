@@ -25,7 +25,7 @@
         "country": "United States"
       },
       "role": "seller",
-      "action": "lock"
+      "action": "unlock"
     },
     {
       "id": "2",
@@ -44,13 +44,14 @@
         "country": "United States"
       },
       "role": "seller",
-      "action": "lock"
+      "action": "unlock",
+      "store_id": "store1"
     },
     {
       "id": "3",
       "email": "user3@gmail.com",
       "password": "123123",
-      "fullname": "David Wilson 222",
+      "fullname": "Seller 3",
       "order_id": [
         "ORD003"
       ],
@@ -61,7 +62,8 @@
         "country": "United States"
       },
       "role": "seller",
-      "action": "unlock"
+      "action": "unlock",
+      "store_id": "store1"
     },
     {
       "id": "4",
@@ -119,6 +121,33 @@
       },
       "role": "admin",
       "action": "unlock"
+    }
+  ],
+  "stores": [
+    {
+      "id": "store1",
+      "storeName": "EBAY",
+      "description": "Welcome to EBAY Store – the trusted destination for technology enthusiasts.",
+      "bannerImageURL": "https://www.anhphuong.com.vn/uploads/weblink/thumbs/820__banner_820x310_giamgia_anhphuong.jpg",
+      "banners": [
+        {
+          "url": "https://www.anhphuong.com.vn/uploads/weblink/thumbs/820__banner_820x310_giamgia_anhphuong.jpg",
+          "title": "Welcome to EBAY Store"
+        },
+        {
+          "url": "https://png.pngtree.com/png-clipart/20230922/original/pngtree-flash-sale-banner-abstract-blue-technology-background-special-diagonal-background-vector-png-image_12527054.png",
+          "title": "Welcome to EBAY "
+        },
+        {
+          "url": "https://tse4.mm.bing.net/th/id/OIP.80KyauuIl4TrKbnLWp7IUAHaCQ?rs=1&pid=ImgDetMain",
+          "title": "aaa"
+        }
+      ],
+      "seller_ids": [
+        "1",
+        "2",
+        "3"
+      ]
     }
   ],
   "orders": [
@@ -1406,7 +1435,7 @@
   ],
   "voucher": [
     {
-      "id": 1,
+      "id": "1",
       "code": "SUMMER2023",
       "name": "Khuyến mãi mùa hè",
       "discountType": "percentage",
@@ -1416,7 +1445,7 @@
       "isActive": true
     },
     {
-      "id": 2,
+      "id": "2",
       "code": "WELCOME50",
       "name": "Chào mừng thành viên mới",
       "discountType": "fixed",
