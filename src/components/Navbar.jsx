@@ -189,7 +189,7 @@ const Navbar = () => {
                         
                         {user && user.role === 'seller' && (
                             <li className="nav-item">
-                                <Link className="nav-link text-white" to="/seller-dashboard">
+                                <Link className="nav-link text-white" to="/product-list">
                                     Seller Dashboard
                                 </Link>
                             </li>
@@ -245,7 +245,7 @@ const Navbar = () => {
                                     id="dropdown-user"
                                 >
                                     <Image
-                                        src={guestAva}
+                                        src={user.image}
                                         alt="User Avatar"
                                         roundedCircle
                                         style={{ width: "30px", height: "30px", objectFit: "cover" }}
@@ -256,12 +256,13 @@ const Navbar = () => {
                                 <Dropdown.Menu className="shadow border-0">
                                     {/* <Dropdown.ItemText className="text-muted small">{user.email}</Dropdown.ItemText> */}
                                     <Dropdown.Divider />
-                                    <Dropdown.Item as={Link} to="/profile">
-                                        <BsPersonCircle className="me-2" /> My Profile
+                                    <Dropdown.Item as={Link} to="/user-profile">
+                                        {/* <BsPersonCircle className="me-2" />  */}
+                                        My Profile
                                     </Dropdown.Item>
-                                    <Dropdown.Item as={Link} to="/orders">
+                                    {/* <Dropdown.Item as={Link} to="/orders">
                                         My Orders
-                                    </Dropdown.Item>
+                                    </Dropdown.Item> */}
                                     <Dropdown.Item as={Link} to="/change-password">
                                         Change Password
                                     </Dropdown.Item>
@@ -269,10 +270,10 @@ const Navbar = () => {
                                         <>
                                             <Dropdown.Divider />
                                             <Dropdown.ItemText className="fw-bold small text-primary">Seller Options</Dropdown.ItemText>
-                                            <Dropdown.Item as={Link} to="/inventory">
+                                            <Dropdown.Item as={Link} to="/inventory-management">
                                                 Inventory Management
                                             </Dropdown.Item>
-                                            <Dropdown.Item as={Link} to="/vouchers">
+                                            <Dropdown.Item as={Link} to="/voucher-management">
                                                 Voucher Management
                                             </Dropdown.Item>
                                         </>

@@ -3,19 +3,19 @@ import { Container, Card, Button, Form, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 
 const Feedback = () => {
-  const [reviews, setReviews] = useState([]); // lưu danh sách reviews
-  const [editingResponse, setEditingResponse] = useState({}); // lưu phản hồi đang sửa của từng review
-  const [editingReview, setEditingReview] = useState({}); // đánh dấu review nào đang ở chế độ chỉnh sửa
-  const [filterOption, setFilterOption] = useState('all'); // bộ lọc: all, answered, unanswered
+  const [reviews, setReviews] = useState([]); // Store the list of reviews
+  const [editingResponse, setEditingResponse] = useState({}); // Store the response being edited for each review
+  const [editingReview, setEditingReview] = useState({}); // Mark the review currently in edit mode
+  const [filterOption, setFilterOption] = useState('all'); // Filter options: all, answered, unanswered
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Lấy dữ liệu reviews từ API khi component mount
+  // Fetch reviews data from API when the component mounts
   useEffect(() => {
     const fetchReviews = async () => {
       try {
         const response = await axios.get('http://localhost:9999/reviews');
-        // Nếu API trả về mảng trực tiếp hoặc object chứa key "reviews"
+        // If the API returns an array directly or an object with the key "reviews"
         const data = Array.isArray(response.data)
           ? response.data
           : response.data.reviews || [];
@@ -30,7 +30,7 @@ const Feedback = () => {
     fetchReviews();
   }, []);
 
-  // Xử lý thay đổi nội dung trong ô textarea
+  // Handle changes in the response textarea
   const handleResponseChange = (reviewId, value) => {
     setEditingResponse(prev => ({
       ...prev,
@@ -38,7 +38,7 @@ const Feedback = () => {
     }));
   };
 
-  // Toggle hiển thị ô textarea để trả lời hoặc chỉnh sửa phản hồi (chỉ quản lý UI)
+  // Toggle the textarea to answer or edit the response (UI management only)
   const handleToggleEdit = (reviewId) => {
     setEditingReview(prev => ({
       ...prev,
@@ -46,22 +46,22 @@ const Feedback = () => {
     }));
   };
 
-  // Khi nhấn "Gửi phản hồi", cập nhật seller_response của review thông qua PATCH request
+  // When "Submit Response" is clicked, update the seller_response of the review via PATCH request
   const handleSubmitResponse = async (reviewId) => {
     try {
-      // Sửa lại URL PATCH: sử dụng /reviews/{reviewId}
+      // Update URL for PATCH request: using /reviews/{reviewId}
       const response = await axios.patch(`http://localhost:9999/reviews/${reviewId}`, {
         seller_response: editingResponse[reviewId]
       });
-      // Giả sử response.data chứa review đã được cập nhật từ server
+      // Assuming response.data contains the updated review from the server
       const updatedReview = response.data;
 
-      // Cập nhật lại state reviews
+      // Update the state reviews
       const updatedReviews = reviews.map(review =>
         review.id === reviewId ? updatedReview : review
       );
       setReviews(updatedReviews);
-      // Dừng chế độ chỉnh sửa và reset nội dung phản hồi
+      // Stop editing mode and reset the response content
       setEditingReview(prev => ({ ...prev, [reviewId]: false }));
       setEditingResponse(prev => ({ ...prev, [reviewId]: '' }));
     } catch (err) {
@@ -69,7 +69,7 @@ const Feedback = () => {
     }
   };
 
-  // Lọc reviews dựa vào tùy chọn dropdown
+  // Filter reviews based on the selected dropdown option
   const filteredReviews = reviews.filter(review => {
     if (filterOption === 'answered') {
       return review.seller_response && review.seller_response.trim().length > 0;
@@ -82,7 +82,7 @@ const Feedback = () => {
   if (loading) {
     return (
       <Container className="mt-5">
-        <p>Đang tải dữ liệu...</p>
+        <p>Loading data...</p>
       </Container>
     );
   }
@@ -90,7 +90,7 @@ const Feedback = () => {
   if (error) {
     return (
       <Container className="mt-5">
-        <p className="text-danger">Lỗi: {error}</p>
+        <p className="text-danger">Error: {error}</p>
       </Container>
     );
   }
@@ -104,8 +104,8 @@ const Feedback = () => {
         <Col md="auto">
           <Form.Select value={filterOption} onChange={(e) => setFilterOption(e.target.value)}>
             <option value="all">All</option>
-            <option value="answered">Đã trả lời</option>
-            <option value="unanswered">Chưa trả lời</option>
+            <option value="answered">Answered</option>
+            <option value="unanswered">Unanswered</option>
           </Form.Select>
         </Col>
       </Row>
@@ -127,38 +127,38 @@ const Feedback = () => {
                 <strong>Order ID:</strong> {review.order_id} <br />
                 <strong>Product ID:</strong> {review.product_id} <br />
                 <strong>Review:</strong> {review.comment} <br />
-                <strong>Seller Response:</strong> {review.seller_response || "Chưa có phản hồi."}
+                <strong>Seller Response:</strong> {review.seller_response || "No response yet."}
               </Card.Text>
-              {/* Nếu chưa có phản hồi và không đang edit, hiển thị nút "Trả lời" */}
+              {/* If no response and not editing, show "Reply" button */}
               {!review.seller_response && !editingReview[review.id] && (
                 <Button variant="secondary" onClick={() => handleToggleEdit(review.id)}>
-                  Trả lời
+                  Reply
                 </Button>
               )}
-              {/* Nếu đã có phản hồi và không đang edit, hiển thị nút "Sửa phản hồi" */}
+              {/* If there is a response and not editing, show "Edit Response" button */}
               {review.seller_response && !editingReview[review.id] && (
                 <Button variant="outline-primary" onClick={() => handleToggleEdit(review.id)}>
-                  Sửa phản hồi
+                  Edit Response
                 </Button>
               )}
-              {/* Nếu đang ở chế độ chỉnh sửa, hiển thị ô textarea */}
+              {/* If editing, show the textarea */}
               {editingReview[review.id] && (
                 <Form className="mt-2">
                   <Form.Group controlId={`response-${review.id}`}>
                     <Form.Control
                       as="textarea"
                       rows={3}
-                      placeholder="Nhập phản hồi của bạn..."
+                      placeholder="Enter your response..."
                       value={editingResponse[review.id] || ""}
                       onChange={(e) => handleResponseChange(review.id, e.target.value)}
                     />
                   </Form.Group>
                   <div className="mt-2">
                     <Button variant="primary" onClick={() => handleSubmitResponse(review.id)}>
-                      Gửi phản hồi
+                      Submit Response
                     </Button>{' '}
                     <Button variant="outline-secondary" onClick={() => handleToggleEdit(review.id)}>
-                      Hủy
+                      Cancel
                     </Button>
                   </div>
                 </Form>
@@ -167,7 +167,7 @@ const Feedback = () => {
           </Card>
         ))
       ) : (
-        <p>Không có đánh giá nào được ghi nhận.</p>
+        <p>No reviews found.</p>
       )}
     </Container>
   );

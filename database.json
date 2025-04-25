@@ -25,7 +25,8 @@
         "country": "United States"
       },
       "role": "seller",
-      "action": "unlock"
+      "action": "unlock",
+      "image": "/assets/images/guestava.jpg"
     },
     {
       "id": "2",
@@ -45,7 +46,8 @@
       },
       "role": "seller",
       "action": "unlock",
-      "store_id": "store1"
+      "store_id": "store1",
+      "image": "/assets/images/guestava.jpg"
     },
     {
       "id": "3",
@@ -59,11 +61,12 @@
         "street": "789 Oak St",
         "zipcode": "54321",
         "city": "Chicago",
-        "country": "United States"
+        "country": "United State"
       },
       "role": "seller",
       "action": "unlock",
-      "store_id": "store1"
+      "store_id": "store1",
+      "image": "/assets/images/1745506472048.png"
     },
     {
       "id": "4",
@@ -84,7 +87,8 @@
         "country": "United States"
       },
       "role": "admin",
-      "action": "lock"
+      "action": "lock",
+      "image": "/assets/images/guestava.jpg"
     },
     {
       "id": "5",
@@ -102,7 +106,8 @@
         "country": "United States"
       },
       "role": "admin",
-      "action": "lock"
+      "action": "lock",
+      "image": "/assets/images/guestava.jpg"
     },
     {
       "id": "27b4",
@@ -120,7 +125,8 @@
         "country": "Vietnam"
       },
       "role": "admin",
-      "action": "unlock"
+      "action": "unlock",
+      "image": "/assets/images/guestava.jpg"
     }
   ],
   "stores": [
@@ -140,7 +146,7 @@
         },
         {
           "url": "https://tse4.mm.bing.net/th/id/OIP.80KyauuIl4TrKbnLWp7IUAHaCQ?rs=1&pid=ImgDetMain",
-          "title": "aaa"
+          "title": "Hello Everyone"
         }
       ],
       "seller_ids": [
@@ -666,46 +672,12 @@
   ],
   "products": [
     {
-      "idProduct": "1",
-      "title": "Brown Leather Bag",
-      "description": "Handcrafted genuine leather bag with premium stitching and multiple compartments",
-      "price": 2500,
-      "quantity": 100,
-      "categoryId": 1,
-      "url": "https://picsum.photos/id/7",
-      "status": "Active",
-      "isAuction": true,
-      "id": "1",
-      "hasError": true
-    },
-    {
-      "id": "2",
-      "title": "Vintage Camera",
-      "description": "Classic film camera with manual focus and exposure controls",
-      "price": 1800,
-      "categoryId": 2,
-      "url": "https://picsum.photos/id/250",
-      "status": "available",
-      "quantity": 24,
-      "isAuction": true
-    },
-    {
-      "id": "3",
-      "title": "Modern Laptop",
-      "description": "High-performance laptop with sleek design and long battery life",
-      "price": 4500,
-      "categoryId": 2,
-      "url": "https://picsum.photos/id/0",
-      "status": "available",
-      "quantity": 14
-    },
-    {
       "id": "4",
       "title": "Wireless Headphones",
       "description": "Noise-cancelling headphones with premium sound quality",
       "price": 1200,
       "categoryId": 2,
-      "url": "https://picsum.photos/id/367",
+      "url": "/assets/products/d_ng_3.webp",
       "status": "available",
       "quantity": 50
     },
@@ -715,7 +687,7 @@
       "description": "Handmade ceramic mug with artistic design and comfortable handle",
       "price": 350,
       "categoryId": 3,
-      "url": "https://picsum.photos/id/30",
+      "url": "/assets/products/se_2020_0000_layer_3_3_1_3_2.webp",
       "status": "available",
       "quantity": 100
     },
@@ -725,7 +697,7 @@
       "description": "Adjustable LED desk lamp with multiple brightness levels",
       "price": 750,
       "categoryId": 3,
-      "url": "https://picsum.photos/id/859",
+      "url": "/assets/products/11promaxgray2.jpg",
       "status": "available",
       "quantity": 55,
       "isAuction": true
@@ -736,7 +708,7 @@
       "description": "Smart fitness tracker with heart rate monitor and sleep tracking",
       "price": 950,
       "categoryId": 4,
-      "url": "https://picsum.photos/id/719",
+      "url": "/assets/products/11white2.jpg",
       "status": "available",
       "quantity": 43,
       "isAuction": false
@@ -747,7 +719,7 @@
       "description": "Waterproof Bluetooth speaker with 360-degree sound",
       "price": 880,
       "categoryId": 5,
-      "url": "https://picsum.photos/id/27",
+      "url": "/assets/products/12miniblack2.jpg",
       "status": "available",
       "quantity": 61
     },
@@ -757,7 +729,7 @@
       "description": "Slim leather wallet with RFID protection and multiple card slots",
       "price": 450,
       "categoryId": 1,
-      "url": "https://picsum.photos/id/103",
+      "url": "/assets/products/1_251_1.webp",
       "status": "available",
       "quantity": 81
     },
@@ -767,7 +739,7 @@
       "description": "Stylish street fashion denim jacket",
       "price": 1200,
       "categoryId": 1,
-      "url": "https://picsum.photos/id/365",
+      "url": "/assets/products/iphone_xr_64gb_1.webp",
       "status": "available",
       "quantity": 40
     },
@@ -777,7 +749,7 @@
       "description": "Versatile athletic shoes suitable for running and gym workouts",
       "price": 1500,
       "categoryId": 4,
-      "url": "https://picsum.photos/id/21",
+      "url": "/assets/products/dien-thoai-samsung-galaxy-s25-utra_24_.webp",
       "status": "available",
       "quantity": 70
     },
@@ -787,7 +759,7 @@
       "description": "Automatic rice cooker with multiple cooking functions",
       "price": 1800,
       "categoryId": 3,
-      "url": "https://picsum.photos/id/292",
+      "url": "/assets/products/op-lung-samsung-galaxy-s23-slimcase-classic-clear_5_.webp",
       "status": "available",
       "quantity": 35
     },
@@ -797,7 +769,7 @@
       "description": "Complete yoga kit with mat and accessories",
       "price": 980,
       "categoryId": 4,
-      "url": "https://picsum.photos/id/437",
+      "url": "/assets/products/dien-thoai-nothing-phone-2a-plus_1_.webp",
       "status": "available",
       "quantity": 40
     },
@@ -807,7 +779,7 @@
       "description": "Ergonomic mouse with customizable RGB lighting and high-precision sensor",
       "price": 850,
       "categoryId": 2,
-      "url": "https://picsum.photos/id/128",
+      "url": "/assets/products/tay-cam-choi-game-backbone-one-cho-mobile_6__1.webp",
       "status": "available",
       "quantity": 30
     },
@@ -817,7 +789,7 @@
       "description": "Soft and warm wool scarf with classic plaid pattern",
       "price": 700,
       "categoryId": 1,
-      "url": "https://picsum.photos/id/67",
+      "url": "/assets/products/dien-thoai-nothing-phone-2a_1_1.webp",
       "status": "available",
       "quantity": 75
     },
@@ -827,7 +799,7 @@
       "description": "Professional tennis racket with balanced design",
       "price": 2200,
       "categoryId": 5,
-      "url": "https://picsum.photos/id/29",
+      "url": "/assets/products/203102-ksp.webp",
       "status": "unavailable",
       "quantity": 77
     },
@@ -837,7 +809,7 @@
       "description": "Fast-boiling kettle with auto shut-off and sleek stainless steel design",
       "price": 1100,
       "categoryId": 3,
-      "url": "https://picsum.photos/id/89",
+      "url": "/assets/products/HP-Omen-Max-16-cover.jpg",
       "status": "available",
       "quantity": 40
     },
@@ -847,7 +819,7 @@
       "description": "Lightweight backpack with hydration compatibility for outdoor activities",
       "price": 1300,
       "categoryId": 4,
-      "url": "https://picsum.photos/id/543",
+      "url": "/assets/products/text_ng_n_2__6_18.webp",
       "status": "available",
       "quantity": 24
     },
@@ -857,7 +829,7 @@
       "description": "Retro-style record player with built-in speakers and Bluetooth",
       "price": 2500,
       "categoryId": 5,
-      "url": "https://picsum.photos/id/156",
+      "url": "/assets/products/laptop_asus_rog_zephyrus_g16_ga605wi-qr156ws_-_1.webp",
       "status": "available",
       "quantity": 4
     },
@@ -867,7 +839,7 @@
       "description": "Polarized sunglasses with UV protection and stylish frame",
       "price": 900,
       "categoryId": 1,
-      "url": "https://picsum.photos/id/234",
+      "url": "/assets/products/laptop-dell-gaming-g15-5520.webp",
       "status": "available",
       "quantity": 60
     },
@@ -877,7 +849,7 @@
       "description": "Portable drawing tablet with pressure-sensitive stylus",
       "price": 3200,
       "categoryId": 2,
-      "url": "https://picsum.photos/id/678",
+      "url": "/assets/products/macbook-air-m2-2022-16gb_1_.webp",
       "status": "available",
       "quantity": 18
     },
@@ -887,7 +859,7 @@
       "description": "Weather-resistant tent for 2-3 people with easy setup",
       "price": 2800,
       "categoryId": 4,
-      "url": "https://picsum.photos/id/987",
+      "url": "/assets/products/text_ng_n_10.webp",
       "status": "available",
       "quantity": 34
     },
@@ -897,7 +869,7 @@
       "description": "Handcrafted wooden chess set with elegant design",
       "price": 1400,
       "categoryId": 5,
-      "url": "https://picsum.photos/id/321",
+      "url": "/assets/products/laptop-hp-spectre-x360-14-ef0030tu-6k773pa-cu-dep-1_4.webp",
       "status": "available",
       "quantity": 45
     },
@@ -907,7 +879,7 @@
       "description": "Memory foam travel pillow with ergonomic design",
       "price": 600,
       "categoryId": 1,
-      "url": "https://picsum.photos/id/444",
+      "url": "/assets/products/laptop_lenovo_yoga_slim_7_15ill9_83hm000gvn_-_2_1.webp",
       "status": "available",
       "quantity": 85
     },
@@ -917,7 +889,7 @@
       "description": "Wi-Fi enabled thermostat with energy-saving features",
       "price": 2000,
       "categoryId": 3,
-      "url": "https://picsum.photos/id/555",
+      "url": "/assets/products/google_tivi_coocaa_4k_55_inch_55y73_-_3.webp",
       "status": "available",
       "quantity": 13
     },
@@ -927,7 +899,7 @@
       "description": "Mechanical keyboard with RGB backlighting and programmable keys",
       "price": 1500,
       "categoryId": 2,
-      "url": "https://picsum.photos/id/666",
+      "url": "/assets/products/1000_3_1_1_1.webp",
       "status": "available",
       "quantity": 25
     },
@@ -937,7 +909,7 @@
       "description": "Classic board game set for family and friends",
       "price": 1100,
       "categoryId": 5,
-      "url": "https://picsum.photos/id/482",
+      "url": "/assets/products/sansung_2__2.webp",
       "status": "available",
       "quantity": 30
     },
@@ -947,7 +919,7 @@
       "description": "Rechargeable toothbrush with multiple brushing modes",
       "price": 950,
       "categoryId": 3,
-      "url": "https://picsum.photos/id/777",
+      "url": "/assets/products/pixel-watch-3-ho-tro-cap-nhat-3-nam-1.jpg",
       "status": "available",
       "quantity": 50
     },
@@ -957,7 +929,7 @@
       "description": "Durable waterproof hiking boots with ankle support",
       "price": 1700,
       "categoryId": 4,
-      "url": "https://picsum.photos/id/888",
+      "url": "/assets/products/dong-ho-thong-minh-oneplus-watch.jpg",
       "status": "available",
       "quantity": 20
     },
@@ -967,7 +939,7 @@
       "description": "Silent-click wireless mouse with long battery life",
       "price": 500,
       "categoryId": 2,
-      "url": "https://picsum.photos/id/999",
+      "url": "/assets/products/text_ng_n_3__6_65.webp",
       "status": "available",
       "quantity": 80
     },
@@ -977,7 +949,7 @@
       "description": "Compact air purifier with HEPA filter for clean air",
       "price": 2300,
       "categoryId": 3,
-      "url": "https://picsum.photos/id/101",
+      "url": "/assets/products/sony-wrist-watch-1000x1000.jpg",
       "status": "available",
       "quantity": 12
     },
@@ -987,7 +959,7 @@
       "description": "Professional-grade soccer ball with durable stitching",
       "price": 650,
       "categoryId": 5,
-      "url": "https://picsum.photos/id/202",
+      "url": "/assets/products/sm-r960_001_front_silver_1.webp",
       "status": "available",
       "quantity": 100
     },
@@ -997,7 +969,7 @@
       "description": "Thermal gloves with touchscreen compatibility",
       "price": 400,
       "categoryId": 1,
-      "url": "https://picsum.photos/id/304",
+      "url": "/assets/products/samsung-galaxy-buds-2-pro-_8_.webp",
       "status": "available",
       "quantity": 120
     },
@@ -1007,7 +979,7 @@
       "description": "Color-changing LED bulb with app control",
       "price": 300,
       "categoryId": 3,
-      "url": "https://picsum.photos/id/404",
+      "url": "/assets/products/Google-Pixel-Watch-2.jpg",
       "status": "available",
       "quantity": 200
     },
@@ -1017,7 +989,7 @@
       "description": "Insulated backpack cooler for picnics and outdoor trips",
       "price": 1400,
       "categoryId": 4,
-      "url": "https://picsum.photos/id/505",
+      "url": "/assets/products/b78203e9c64a4a9b3af8caecf56f3e88.png",
       "status": "available",
       "quantity": 30
     },
@@ -1027,7 +999,7 @@
       "description": "True wireless earbuds with sweat resistance",
       "price": 1100,
       "categoryId": 2,
-      "url": "https://picsum.photos/id/606",
+      "url": "/assets/products/tivi-samsung-4k-ua55au7700kxxv.jpg",
       "status": "available",
       "quantity": 45
     },
@@ -1037,7 +1009,7 @@
       "description": "Non-stick cookware set with 5 pieces",
       "price": 3500,
       "categoryId": 3,
-      "url": "https://picsum.photos/id/701",
+      "url": "/assets/products/1-1020x570.jpg",
       "status": "available",
       "quantity": 10
     },
@@ -1047,7 +1019,7 @@
       "description": "Lightweight folding bicycle for urban commuting",
       "price": 5000,
       "categoryId": 4,
-      "url": "https://picsum.photos/id/808",
+      "url": "/assets/products/vi-vn-google-sony-4k-65-inch-kd-65x75k-1.jpg",
       "status": "available",
       "quantity": 8
     },
@@ -1057,7 +1029,7 @@
       "description": "1000-piece jigsaw puzzle with scenic artwork",
       "price": 700,
       "categoryId": 5,
-      "url": "https://picsum.photos/id/909",
+      "url": "/assets/products/1fix1-1020x570.jpg",
       "status": "available",
       "quantity": 50
     },
@@ -1067,7 +1039,7 @@
       "description": "Beginner-friendly electric guitar with amplifier",
       "price": 3800,
       "categoryId": 5,
-      "url": "https://picsum.photos/id/111",
+      "url": "/assets/products/tivi-lg-60lf632t-700x467-1.jpg",
       "status": "available",
       "quantity": 15
     },
@@ -1077,7 +1049,7 @@
       "description": "Wi-Fi doorbell with camera and motion detection",
       "price": 2600,
       "categoryId": 3,
-      "url": "https://picsum.photos/id/222",
+      "url": "/assets/products/vi-vn-tong-quan.jpg",
       "status": "available",
       "quantity": 20
     },
@@ -1087,7 +1059,7 @@
       "description": "Waterproof raincoat with breathable fabric",
       "price": 850,
       "categoryId": 1,
-      "url": "https://picsum.photos/id/323",
+      "url": "/assets/products/1-1020x570 (1).jpg",
       "status": "available",
       "quantity": 60
     }
@@ -1493,7 +1465,7 @@
       "buyer_id": "2",
       "rating": 1,
       "comment": "Review comment number 1.",
-      "seller_response": "",
+      "seller_response": "asklhdjlakshdlkasf",
       "review_date": "2025-03-25T10:00:00Z",
       "id": "1"
     },

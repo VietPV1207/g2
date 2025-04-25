@@ -1,4 +1,3 @@
-// 🛠 InventoryManagement.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,15 +15,21 @@ const InventoryManagement = () => {
         return res.json();
       })
       .then((data) => {
+        const cleanedData = data.map(p => ({
+          ...p,
+          hasError: false,
+          quantity: p.quantity ?? 0,
+        }));
+
         fetch('http://localhost:9999/categories')
           .then((res2) => res2.json())
           .then((catData) => {
             const fullData = {
-              products: data,
+              products: cleanedData,
               categories: catData,
             };
             setDatabase(fullData);
-            setProducts(data);
+            setProducts(cleanedData);
           });
       })
       .catch((err) => {
@@ -36,60 +41,45 @@ const InventoryManagement = () => {
   if (error) return <div className="text-red-600 font-semibold p-4">Error: {error}</div>;
   if (!database) return <div className="text-gray-600 p-4">Loading products...</div>;
 
-  // ✅ Đã sửa để cho phép xóa hoàn toàn input
   const handleQuantityChange = (productId, newQuantity) => {
     if (newQuantity === '') {
-      setProducts(
-        products.map((product) =>
-          product.id === productId ? { ...product, quantity: '' } : product
-        )
-      );
+      setProducts(products.map(product =>
+        product.id === productId ? { ...product, quantity: '' } : product
+      ));
       return;
     }
 
     const quantity = parseInt(newQuantity);
     if (!isNaN(quantity) && quantity >= 0) {
-      setProducts(
-        products.map((product) =>
-          product.id === productId ? { ...product, quantity } : product
-        )
-      );
+      setProducts(products.map(product =>
+        product.id === productId ? { ...product, quantity } : product
+      ));
     }
   };
 
-  // ✅ Đảm bảo gửi giá trị hợp lệ lên server
   const handleSave = (product) => {
     if (product.quantity === '' || product.quantity === undefined || product.quantity === null) {
       alert(`Please enter quantity for "${product.title}"`);
-      
-      // Cập nhật trạng thái lỗi cho sản phẩm này
-      setProducts(products.map(p => 
+      setProducts(products.map(p =>
         p.id === product.id ? { ...p, hasError: true } : p
       ));
       return;
     }
-  
+
     const quantity = parseInt(product.quantity);
     if (isNaN(quantity) || quantity < 0) {
       alert(`Invalid quantity for "${product.title}"`);
-      
-      // Cập nhật trạng thái lỗi cho sản phẩm này
-      setProducts(products.map(p => 
+      setProducts(products.map(p =>
         p.id === product.id ? { ...p, hasError: true } : p
       ));
       return;
     }
-  
-    // Nếu không có lỗi, loại bỏ trạng thái lỗi
-    setProducts(products.map(p => 
-      p.id === product.id ? { ...p, hasError: false } : p
-    ));
-  
+
     const updatedProduct = {
       ...product,
       quantity: quantity,
     };
-  
+
     fetch(`http://localhost:9999/products/${product.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -97,6 +87,9 @@ const InventoryManagement = () => {
     })
       .then((res) => {
         if (!res.ok) throw new Error('Failed to save');
+        setProducts(products.map(p =>
+          p.id === product.id ? { ...updatedProduct, hasError: false } : p
+        ));
         alert(`Updated quantity for ${product.title} to ${updatedProduct.quantity}`);
       })
       .catch((err) => {
@@ -127,9 +120,7 @@ const InventoryManagement = () => {
 
   return (
     <div style={styles.container}>
-      <button onClick={() => navigate('/')} style={styles.backBtn}>
-        ⬅️ Back to Home
-      </button>
+      
 
       <h2 style={styles.title}>📦 Inventory Management</h2>
 
@@ -174,7 +165,7 @@ const InventoryManagement = () => {
                       onChange={(e) => handleQuantityChange(product.id, e.target.value)}
                       style={{
                         ...styles.inputNumber,
-                        borderColor: product.hasError ? '#ef4444' : '#d1d5db', // Nếu có lỗi, viền đỏ
+                        borderColor: product.hasError ? '#ef4444' : '#d1d5db',
                       }}
                     />
                   </td>
@@ -214,10 +205,6 @@ const styles = {
     cursor: 'pointer',
     transition: 'background-color 0.3s ease',
   },
-  backBtnHover: {
-    backgroundColor: '#3b82f6',
-    color: 'white',
-  },
   title: {
     fontSize: '26px',
     fontWeight: 'bold',
@@ -233,9 +220,6 @@ const styles = {
     fontSize: '16px',
     transition: 'border-color 0.3s ease',
   },
-  searchInputFocus: {
-    borderColor: '#3b82f6',
-  },
   noProduct: {
     fontStyle: 'italic',
     color: '#6b7280',
@@ -249,7 +233,6 @@ const styles = {
     overflow: 'hidden',
   },
   th: {
-    backgroundColor: '#f3f4f6',
     padding: '12px',
     textAlign: 'left',
     fontWeight: '600',
@@ -267,9 +250,6 @@ const styles = {
     textAlign: 'center',
     transition: 'border-color 0.3s ease',
   },
-  inputNumberError: {
-    borderColor: '#ef4444',
-  },
   saveBtn: {
     backgroundColor: '#3b82f6',
     color: 'white',
@@ -280,9 +260,6 @@ const styles = {
     cursor: 'pointer',
     transition: 'background-color 0.3s ease',
   },
-  saveBtnHover: {
-    backgroundColor: '#2563eb',
-  },
   deleteBtn: {
     backgroundColor: '#ef4444',
     color: 'white',
@@ -291,22 +268,6 @@ const styles = {
     padding: '6px 12px',
     cursor: 'pointer',
     transition: 'background-color 0.3s ease',
-  },
-  deleteBtnHover: {
-    backgroundColor: '#dc2626',
-  },
-  jsonBox: {
-    backgroundColor: '#f3f4f6',
-    padding: '16px',
-    borderRadius: '6px',
-    maxHeight: '400px',
-    overflowY: 'auto',
-    border: '1px solid #e5e7eb',
-    marginTop: '10px',
-    fontSize: '14px',
-    fontFamily: 'Courier, monospace',
-    whiteSpace: 'pre-wrap',
-    wordWrap: 'break-word',
   },
 };
 

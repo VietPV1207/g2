@@ -46,7 +46,7 @@ const Login = () => {
 
       // Chuyển hướng dựa theo role của người dùng
       if (foundUser.role === "seller") {
-        navigate("/voucher-management");
+        navigate("/");
       } else {
         setErrorMsg("Bạn không có quyền truy cập!");
       }
@@ -90,7 +90,7 @@ const Login = () => {
       localStorage.setItem("user", JSON.stringify(foundUser));
 
       if (foundUser.role === "seller") {
-        navigate("/voucher-management");
+        navigate("/");
       } else {
         setErrorMsg("Bạn không có quyền truy cập!");
       }

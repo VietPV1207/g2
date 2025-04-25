@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-
 import { UserProvider } from './pages/UserContext';
 
 // Import layout seller
@@ -12,18 +11,22 @@ import Login from './pages/Login';
 import Homepage from './pages/Homepage';
 import SellerDashboard from './pages/SellerDashboard';
 import StoreProfile from './pages/StoreProfile';
-import CreateStore from './pages/CreateStore';
-import ProductUpload from './pages/ProductUpload';
 import ProductListManagement from './pages/ProductListManagement';
-import InventoryManagement from './pages/InventoryManagement';
+import InventoryManagement from './pages/inventory/InventoryManagement';
 
 // Import các trang voucher
 import VoucherList from './pages/voucher/VoucherList';
 import OrderConfirmation from './pages/OrderConfirmation';
-import OrderStatusUpdate from './pages/OrderStatusUpdate';
 import Feedback from './pages/Feedback';
 import SalesReport from './pages/SalesReport';
-import ComplaintManagement from './pages/ComplaintManagement';
+
+// Import user pages
+import ChangePassword from './pages/user/ChangePassword';
+import EditProfile from './pages/user/EditProfile';
+import SignUp from './pages/user/SignUp';
+import UpdateProfileImage from './pages/user/UpdateProfileImage';
+import UserProfile from './pages/user/UserProfile';
+import { Navbar } from 'react-bootstrap';
 
 function App() {
   // Kiểm tra xem người dùng đã đăng nhập chưa
@@ -45,13 +48,13 @@ function App() {
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<Homepage />} />
-          <Route 
-            path="/login" 
+          <Route
+            path="/login"
             element={
-              isAuthenticated() ? 
-                <Navigate to="/voucher-management" replace /> : 
+              isAuthenticated() ?
+                <Navigate to="/voucher-management" replace /> :
                 <Login />
-            } 
+            }
           />
 
           {/* Protected routes với SellerLayout */}
@@ -63,10 +66,6 @@ function App() {
             {/* Dashboard và quản lý cửa hàng */}
             <Route path="seller-dashboard" element={<SellerDashboard />} />
             <Route path="store-profile" element={<StoreProfile />} />
-            <Route path="create-store" element={<CreateStore />} />
-
-            {/* Quản lý sản phẩm */}
-            <Route path="product-upload" element={<ProductUpload />} />
             <Route path="product-list" element={<ProductListManagement />} />
 
             {/* Quản lý tồn kho */}
@@ -76,7 +75,6 @@ function App() {
             <Route path="voucher-management" element={<VoucherList />} />
             {/* Quản lý đơn hàng */}
             <Route path="order-confirmation" element={<OrderConfirmation />} />
-            <Route path="order-status" element={<OrderStatusUpdate />} />
 
             {/* Phản hồi & đánh giá */}
             <Route path="feedback" element={<Feedback />} />
@@ -84,10 +82,14 @@ function App() {
             {/* Báo cáo doanh số */}
             <Route path="sales-report" element={<SalesReport />} />
 
-            {/* Quản lý khiếu nại */}
-            <Route path="complaint-management" element={<ComplaintManagement />} />
-          </Route>
 
+          </Route>
+          {/* User-related routes */}
+          <Route path="user-profile" element={<UserProfile />} />
+          <Route path="edit-profile" element={<EditProfile />} />
+          <Route path="sign-up" element={<SignUp />} />
+          <Route path="update-imgage" element={<UpdateProfileImage />} />
+          <Route path="change-password" element={<ChangePassword />} />
           {/* Fallback route - nếu không tìm thấy route nào khớp */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

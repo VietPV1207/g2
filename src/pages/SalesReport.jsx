@@ -12,17 +12,17 @@ import {
 
 const SaleReport = () => {
   const [orders, setOrders] = useState([]);
-  const [reportType, setReportType] = useState('week'); // 'week' hoặc 'month'
+  const [reportType, setReportType] = useState('week'); // 'week' or 'month'
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Lấy dữ liệu orders từ API khi component mount
+  // Fetch orders data from API when component mounts
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const response = await fetch('http://localhost:9999/orders');
         if (!response.ok) {
-          throw new Error('Không thể lấy dữ liệu orders từ server.');
+          throw new Error('Unable to fetch orders data from the server.');
         }
         const data = await response.json();
         setOrders(data);
@@ -36,20 +36,20 @@ const SaleReport = () => {
     fetchOrders();
   }, []);
 
-  // Helper: Tính số tuần của một ngày (ISO week number)
+  // Helper: Get the week number of a date (ISO week number)
   const getWeekKey = (dateStr) => {
     const d = new Date(dateStr);
-    // Chuyển sang ngày UTC
+    // Convert to UTC date
     const utcDate = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-    // Thiết lập cho ngày thứ N (trong ISO, thứ 4 nằm trong tuần được tính)
+    // Set the date to Thursday (in ISO, Thursday is considered the start of the week)
     utcDate.setUTCDate(utcDate.getUTCDate() + 4 - (utcDate.getUTCDay() || 7));
-    // Ngày đầu năm ISO
+    // First day of the year in ISO
     const yearStart = new Date(Date.UTC(utcDate.getUTCFullYear(), 0, 1));
     const weekNo = Math.ceil((((utcDate - yearStart) / 86400000) + 1) / 7);
     return `${utcDate.getUTCFullYear()}-W${weekNo}`;
   };
 
-  // Nhóm orders theo tháng: key dạng "YYYY-MM"
+  // Group orders by month: key format "YYYY-MM"
   const groupOrdersByMonth = (ordersList) => {
     const monthMap = {};
 
@@ -64,11 +64,11 @@ const SaleReport = () => {
       monthMap[monthKey].orderCount += 1;
     });
 
-    // Chuyển object thành mảng
+    // Convert object to array
     return Object.values(monthMap).sort((a, b) => (a.month > b.month ? 1 : -1));
   };
 
-  // Nhóm orders theo tuần: key dạng "YYYY-W{weekNo}"
+  // Group orders by week: key format "YYYY-W{weekNo}"
   const groupOrdersByWeek = (ordersList) => {
     const weekMap = {};
 
@@ -82,26 +82,26 @@ const SaleReport = () => {
       weekMap[weekKey].orderCount += 1;
     });
 
-    // Chuyển object thành mảng và sắp xếp theo tuần (theo thứ tự lexicographical có thể hoạt động nếu định dạng ổn định)
+    // Convert object to array and sort by week (lexicographically stable if format is consistent)
     return Object.values(weekMap).sort((a, b) => (a.week > b.week ? 1 : -1));
   };
 
-  // Xác định dữ liệu để chart dựa trên reportType
+  // Determine the chart data based on reportType
   const chartData = reportType === 'week'
     ? groupOrdersByWeek(orders)
     : groupOrdersByMonth(orders);
 
   if (loading) {
-    return <p style={{ textAlign: 'center', marginTop: '20px' }}>Đang tải dữ liệu...</p>;
+    return <p style={{ textAlign: 'center', marginTop: '20px' }}>Loading data...</p>;
   }
 
   if (error) {
-    return <p style={{ textAlign: 'center', marginTop: '20px', color: 'red' }}>Lỗi: {error}</p>;
+    return <p style={{ textAlign: 'center', marginTop: '20px', color: 'red' }}>Error: {error}</p>;
   }
 
   return (
     <div style={styles.container}>
-      <h2>Báo cáo doanh số và đơn hàng</h2>
+      <h2>Sales and Order Report</h2>
       <div style={styles.buttonGroup}>
         <button
           onClick={() => setReportType('week')}
@@ -110,7 +110,7 @@ const SaleReport = () => {
             backgroundColor: reportType === 'week' ? '#0056b3' : '#007BFF'
           }}
         >
-          Báo cáo theo tuần
+          Weekly Report
         </button>
         <button
           onClick={() => setReportType('month')}
@@ -119,7 +119,7 @@ const SaleReport = () => {
             backgroundColor: reportType === 'month' ? '#0056b3' : '#007BFF'
           }}
         >
-          Báo cáo theo tháng
+          Monthly Report
         </button>
       </div>
       <ResponsiveContainer width="100%" height={400}>
@@ -132,8 +132,8 @@ const SaleReport = () => {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="totalSales" fill="#8884d8" name="Doanh số" />
-          <Bar dataKey="orderCount" fill="#82ca9d" name="Số đơn hàng" />
+          <Bar dataKey="totalSales" fill="#8884d8" name="Sales" />
+          <Bar dataKey="orderCount" fill="#82ca9d" name="Orders" />
         </BarChart>
       </ResponsiveContainer>
     </div>

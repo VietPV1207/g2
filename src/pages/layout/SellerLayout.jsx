@@ -8,59 +8,47 @@ const SellerLayout = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Xử lý đăng xuất
+  // Handle logout
   const handleLogout = (e) => {
     e.preventDefault();
     localStorage.removeItem('user');
     navigate('/login');
   };
 
-  // Danh sách menu sidebar cho người bán
+  // Sidebar menu items for sellers
   const menuItems = [
-    { path: '/seller-dashboard', icon: '📊', label: 'Tổng quan' },
-    { path: '/product-list', icon: '📦', label: 'Quản lý sản phẩm' },
-    { path: '/order-confirmation', icon: '🛒', label: 'Quản lý đơn hàng' },
-    { path: '/voucher-management', icon: '🏷️', label: 'Quản lý voucher' },
-    { path: '/inventory-management', icon: '📋', label: 'Quản lý kho hàng' },
-    { path: '/feedback', icon: '⭐', label: 'Đánh giá sản phẩm' },
-    { path: '/sales-report', icon: '📈', label: 'Báo cáo doanh số' },
-    { path: '/store-profile', icon: '🏪', label: 'Hồ sơ cửa hàng' },
-    { path: '/', icon: '🏠', label: 'Về trang chủ' },
-    { path: '#', icon: '🚪', label: 'Đăng xuất', onClick: handleLogout }
+    { path: '/product-list', icon: '📦', label: 'Product Management' },
+    { path: '/order-confirmation', icon: '🛒', label: 'Order Management' },
+    { path: '/voucher-management', icon: '🏷️', label: 'Voucher Management' },
+    { path: '/inventory-management', icon: '📋', label: 'Inventory Management' },
+    { path: '/feedback', icon: '⭐', label: 'Product Feedback' },
+    { path: '/sales-report', icon: '📈', label: 'Sales Report' },
+    { path: '/store-profile', icon: '🏪', label: 'Store Profile' },
+    { path: '/', icon: '🏠', label: 'Back to Home' },
+    { path: '#', icon: '🚪', label: 'Logout', onClick: handleLogout }
   ];
 
-  // Xác định tiêu đề trang dựa vào path hiện tại
+  // Determine page title based on current path
   const getPageTitle = () => {
     const path = location.pathname;
-    if (path.includes('seller-dashboard')) return 'Tổng quan';
-    if (path.includes('product-list')) return 'Quản lý sản phẩm';
-    if (path.includes('order-confirmation')) return 'Quản lý đơn hàng';
+    if (path.includes('product-list')) return 'Product Management';
+    if (path.includes('order-confirmation')) return 'Order Management';
     if (path.startsWith('/voucher-management')) {
-      if (path.includes('/create')) return 'Tạo Voucher mới';
-      if (path.includes('/edit')) return 'Chỉnh sửa Voucher';
-      if (path.includes('/apply')) return 'Áp dụng Voucher';
-      return 'Quản lý Voucher';
+      if (path.includes('/create')) return 'Create New Voucher';
+      if (path.includes('/edit')) return 'Edit Voucher';
+      if (path.includes('/apply')) return 'Apply Voucher';
+      return 'Voucher Management';
     }
-    if (path.includes('inventory-management')) return 'Quản lý kho hàng';
-    if (path.includes('feedback')) return 'Đánh giá sản phẩm';
-    if (path.includes('sales-report')) return 'Báo cáo doanh số';
-    if (path.includes('store-profile')) return 'Hồ sơ cửa hàng';
-    return 'Kênh người bán';
+    if (path.includes('inventory-management')) return 'Inventory Management';
+    if (path.includes('feedback')) return 'Product Feedback';
+    if (path.includes('sales-report')) return 'Sales Report';
+    if (path.includes('store-profile')) return 'Store Profile';
+    return 'Seller Channel';
   };
 
-  // Hiển thị nút thêm mới phù hợp với từng trang
+  // Display appropriate "Add" button for specific pages
   const renderActionButton = () => {
     const path = location.pathname;
-    
-    
-    if (path === '/product-list') {
-      return (
-        <Link to="/product-upload" className="add-button">
-          <i className="fa fa-plus"></i> Thêm sản phẩm
-        </Link>
-      );
-    }
-    
     return null;
   };
 
@@ -69,7 +57,7 @@ const SellerLayout = () => {
       {/* Sidebar */}
       <div className="sidebar">
         <div className="sidebar-header">
-          <h2>Kênh người bán</h2>
+          <h2>Seller Channel</h2>
         </div>
         <div className="sidebar-menu">
           {menuItems.map((item, index) => (

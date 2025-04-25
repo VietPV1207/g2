@@ -244,7 +244,7 @@ const Homepage = () => {
                       src={product.url} 
                       alt={product.title}
                       className="product-image"
-                      onError={(e) => e.target.src = "https://via.placeholder.com/300x200?text=No+Image"}
+                      // onError={(e) => e.target.src = "https://via.placeholder.com/300x200?text=No+Image"}
                     />
                   </div>
                   <Card.Body>
@@ -299,7 +299,7 @@ const Homepage = () => {
                       src={product.url} 
                       alt={product.title}
                       className="product-image"
-                      onError={(e) => e.target.src = "https://via.placeholder.com/300x200?text=No+Image"}
+                      // onError={(e) => e.target.src = "https://via.placeholder.com/300x200?text=No+Image"}
                     />
                   </div>
                   <Card.Body>
