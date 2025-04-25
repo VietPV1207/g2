@@ -94,37 +94,37 @@ app.use('/assets/images', express.static(uploadFolder));
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////// Dành cho upload ảnh của products 
 
-// const productUploadFolder = path.join(__dirname, '/assets/products');
-// if (!fs.existsSync(productUploadFolder)) {
-//     fs.mkdirSync(productUploadFolder, { recursive: true });
-// }
+const productUploadFolder = path.join(__dirname, '/assets/products');
+if (!fs.existsSync(productUploadFolder)) {
+    fs.mkdirSync(productUploadFolder, { recursive: true });
+}
 
 
-// const productStorage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//         cb(null, productUploadFolder);
-//     },
-//     filename: function (req, file, cb) {
-//         const uniqueSuffix = Date.now() + path.extname(file.originalname);
-//         cb(null, uniqueSuffix);
-//     }
-// });
+const productStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, productUploadFolder);
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + path.extname(file.originalname);
+        cb(null, uniqueSuffix);
+    }
+});
 
-// const productUpload = multer({ storage: productStorage });
+const productUpload = multer({ storage: productStorage });
 
-// // Upload ảnh sản phẩm (Create)
-// app.post('/product/upload', productUpload.single('image'), (req, res) => {
-//     if (!req.file) {
-//         return res.status(400).json({ error: 'No file uploaded.' });
-//     }
-//     res.json({
-//         message: 'Product image uploaded successfully!',
-//         filename: req.file.filename,
-//         path: `/assets/products/${req.file.filename}`
-//     });
-// });
+// Upload ảnh sản phẩm (Create)
+app.post('/product/upload', productUpload.single('image'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded.' });
+    }
+    res.json({
+        message: 'Product image uploaded successfully!',
+        filename: req.file.filename,
+        path: `/assets/products/${req.file.filename}`
+    });
+});
 
-// // Cập nhật ảnh sản phẩm (Update)
+// Cập nhật ảnh sản phẩm (Update)
 // app.put('/product/update/:filename', productUpload.single('image'), (req, res) => {
 //     const oldFilename = req.params.filename;
 //     const oldFilePath = path.join(productUploadFolder, oldFilename);
@@ -142,21 +142,42 @@ app.use('/assets/images', express.static(uploadFolder));
 //     });
 // });
 
-// // Xóa ảnh sản phẩm (Delete)
-// app.delete('/product/delete/:filename', (req, res) => {
-//     const filename = req.params.filename;
-//     const filePath = path.join(productUploadFolder, filename);
+// Route: Cập nhật ảnh sản phẩm (Update)
+app.put('/product/update/:filename', productUpload.single('image'), (req, res) => {
+    const oldFilename = req.params.filename;
+    const oldFilePath = path.join(productUploadFolder, oldFilename);
+  
+    // Xóa ảnh cũ trước khi lưu ảnh mới
+    fs.unlink(oldFilePath, (err) => {
+      if (err) {
+        console.error('Error deleting old file:', err);
+        return res.status(500).json({ error: 'Failed to delete old file.' });
+      }
+  
+      // Sau khi xóa file cũ, trả về thông tin file mới đã được upload
+      res.json({
+        message: 'Product image updated successfully!',
+        newFilename: req.file.filename,
+        path: `/assets/products/${req.file.filename}`
+      });
+    });
+  });
 
-//     fs.unlink(filePath, (err) => {
-//         if (err) {
-//             console.error('Error deleting product image:', err);
-//             return res.status(500).json({ error: 'Failed to delete product image.' });
-//         }
-//         res.json({ message: 'Product image deleted successfully!' });
-//     });
-// });
+// Xóa ảnh sản phẩm (Delete)
+app.delete('/product/delete/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(productUploadFolder, filename);
 
-// app.use('/assets/products', express.static(productUploadFolder));
+    fs.unlink(filePath, (err) => {
+        if (err) {
+            console.error('Error deleting product image:', err);
+            return res.status(500).json({ error: 'Failed to delete product image.' });
+        }
+        res.json({ message: 'Product image deleted successfully!' });
+    });
+});
+
+app.use('/assets/products', express.static(productUploadFolder));
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
