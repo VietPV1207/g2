@@ -78,16 +78,52 @@ th {
   z-index: 1000;
 }
 
+/* Đảm bảo modal được căn giữa và không bị lệch */
 .modal-content {
   background-color: #fff;
   padding: 20px;
   width: 90%;
   max-width: 500px;
-  height: 600px;
   margin: auto;
   border-radius: 8px;
-  box-shadow: 0px 4px 16px rgba(0,0,0,0.2);
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2);
   position: relative;
+  display: flex;
+  flex-direction: column; /* Đảm bảo các thành phần xếp theo cột */
+  gap: 15px; /* Khoảng cách giữa các thành phần */
+}
+
+/* Đảm bảo các input và select không bị lệch */
+.modal-content input,
+.modal-content select {
+  width: 100%; /* Đảm bảo các input và select chiếm toàn bộ chiều rộng */
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* Căn chỉnh nút trong modal */
+.modal-content button {
+  padding: 10px 15px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-content .form-actions {
+  display: flex;
+  justify-content: flex-end; /* Đẩy các nút sang bên phải */
+  gap: 10px; /* Khoảng cách giữa các nút */
+}
+
+/* Đảm bảo tiêu đề modal không bị lệch */
+.modal-content h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center; /* Căn giữa tiêu đề */
 }
 
 .modal-close {
@@ -177,6 +213,56 @@ button.cancel {
   font-weight: bold;
 }
 
+/* Tăng kích thước ảnh */
+td img {
+  width: 100px; /* Tăng chiều rộng ảnh */
+  height: 100px; /* Tăng chiều cao ảnh */
+  object-fit: cover; /* Đảm bảo ảnh không bị méo */
+  border-radius: 8px; /* Tùy chọn: Bo góc ảnh */
+}
 
+/* Đảm bảo các nút không xuống dòng */
+td {
+  white-space: nowrap; /* Ngăn nội dung trong ô xuống dòng */
+}
 
+button.edit, button.delete {
+  display: inline-block; /* Đảm bảo các nút nằm trên cùng một dòng */
+  margin-right: 8px; /* Khoảng cách giữa các nút */
+}
 
+button.edit {
+  background-color: #f39c12;
+  color: white;
+}
+
+button.delete {
+  background-color: #e74c3c;
+  color: white;
+}
+
+/* Toast notification styles */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #4caf50; /* Màu xanh lá cho thông báo thành công */
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.toast.error {
+  background-color: #e74c3c; /* Màu đỏ cho thông báo lỗi */
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}

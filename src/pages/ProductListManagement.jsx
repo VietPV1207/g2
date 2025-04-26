@@ -40,8 +40,8 @@ const ProductManagement = () => {
   };
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0]; // Get the first file
-    setForm({ ...form, image: file }); // Save the selected file
+    const file = e.target.files[0]; // Lấy tệp đầu tiên
+    setForm({ ...form, image: file }); // Lưu tệp vào state
   };
 
   const isSameForm = (a, b) => {
@@ -56,8 +56,54 @@ const ProductManagement = () => {
     );
   };
 
-  const handleSubmit = (e) => {
+  const showToast = (message, type = 'success') => {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      toast.classList.add('show');
+    }, 100);
+
+
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => {
+        document.body.removeChild(toast);
+      }, 300);
+    }, 3000);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Kiểm tra dữ liệu đầu vào
+    if (!form.title.trim()) {
+      showToast('Title is required!', 'error');
+      return;
+    }
+    if (!form.description.trim()) {
+      showToast('Description is required!', 'error');
+      return;
+    }
+    if (!form.price || isNaN(form.price) || form.price <= 0) {
+      showToast('Price must be a positive number!', 'error');
+      return;
+    }
+    if (!form.categoryId) {
+      showToast('Category is required!', 'error');
+      return;
+    }
+    if (!form.quantity || isNaN(form.quantity) || form.quantity < 0) {
+      showToast('Quantity must be a non-negative number!', 'error');
+      return;
+    }
+    if (!form.image && !isEditing) {
+      showToast('Image is required!', 'error');
+      return;
+    }
 
     const productData = new FormData();
     productData.append('title', form.title);
@@ -67,81 +113,74 @@ const ProductManagement = () => {
     productData.append('status', form.status);
     productData.append('quantity', form.quantity);
 
+    // Kiểm tra nếu người dùng chọn ảnh mới
     if (form.image) {
-      productData.append('image', form.image); // Append the image file to FormData
+      productData.append('image', form.image); // Thêm ảnh vào FormData
     }
 
-    if (isEditing) {
-      if (originalForm && isSameForm(form, originalForm)) {
-        alert('No changes detected');
-        return;
+    try {
+      if (isEditing) {
+        let updatedImageUrl = originalForm.url; // Giữ nguyên ảnh cũ nếu không có ảnh mới
+
+        if (form.image) {
+          // Upload ảnh mới nếu có
+          const uploadResponse = await fetch('http://localhost:3000/product/upload', {
+            method: 'POST',
+            body: productData,
+          });
+          const uploadData = await uploadResponse.json();
+          updatedImageUrl = uploadData.path; // Lấy đường dẫn ảnh mới từ API
+        }
+
+        // Cập nhật sản phẩm với đường dẫn ảnh mới
+        const updatedProductData = {
+          ...form,
+          url: updatedImageUrl, // Cập nhật url thay vì image
+        };
+
+        const response = await fetch(`http://localhost:9999/products/${editProductId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedProductData),
+        });
+
+        const updatedProduct = await response.json();
+        setProducts((prev) =>
+          prev.map((product) => (product.id === updatedProduct.id ? updatedProduct : product))
+        );
+        showToast('Product updated successfully!', 'success');
+      } else {
+        // Nếu thêm sản phẩm mới
+        const uploadResponse = await fetch('http://localhost:3000/product/upload', {
+          method: 'POST',
+          body: productData,
+        });
+        const uploadData = await uploadResponse.json();
+
+        const newProductData = {
+          ...form,
+          url: uploadData.path, // Lấy đường dẫn ảnh từ API
+        };
+
+        const response = await fetch('http://localhost:9999/products', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newProductData),
+        });
+
+        const newProduct = await response.json();
+        setProducts((prev) => [...prev, newProduct]);
+        showToast('Product added successfully!', 'success');
       }
 
-      // Lấy tên file của ảnh cũ
-      const oldImageFilename = originalForm.image.split('/').pop(); // Extract old image filename
-
-      // Upload the updated image first
-      fetch(`http://localhost:3000/product/update/${oldImageFilename}`, {
-        method: 'PUT',
-        body: productData, // Sending FormData
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          // After updating the image, update the product data with the new image URL
-          const updatedProductData = {
-            ...form,
-            image: data.path, // Sử dụng đường dẫn ảnh trả về từ API
-          };
-
-          fetch(`http://localhost:9999/products/${editProductId}`, {
-            method: 'PUT',
-            body: JSON.stringify(updatedProductData), // Sending updated product data with new image URL
-            headers: {
-              'Content-Type': 'application/json', // Send as JSON
-            },
-          })
-            .then((res) => res.json())
-            .then((updated) => {
-              setProducts((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
-              resetForm();
-              alert('Product updated successfully!');
-            })
-            .catch(() => alert('Product update failed'));
-        })
-        .catch(() => alert('Image update failed'));
-
-    } else {
-      // Upload the image and create a new product
-      fetch('http://localhost:3000/product/upload', {
-        method: 'POST',
-        body: productData, // Sending FormData
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          // After successfully uploading the image, add the image path to the product
-          const newProduct = {
-            ...form,
-            image: data.path, // Save the image path returned from the server
-            id: crypto.randomUUID(),
-          };
-
-          // Send the product data to create the product in the database
-          fetch('http://localhost:9999/products', {
-            method: 'POST',
-            body: JSON.stringify(newProduct), // Sending product data
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          })
-            .then((res) => res.json())
-            .then((created) => {
-              setProducts((prev) => [...prev, created]);
-              resetForm();
-              alert('Product created successfully!');
-            })
-            .catch(() => alert('Create failed'));
-        })
-        .catch(() => alert('Image upload failed'));
+      resetForm();
+    } catch (error) {
+      console.error('Error:', error);
+      showToast('An error occurred. Please try again.', 'error');
     }
   };
 
@@ -165,26 +204,38 @@ const ProductManagement = () => {
   };
 
   const handleDelete = (id, image) => {
-    // Trích xuất tên file hình ảnh từ đường dẫn
-    const imageFilename = image.split('/').pop(); // Lấy phần cuối của URL hình ảnh (tên file)
+    // Kiểm tra nếu image là chuỗi
+    const imageFilename = typeof image === 'string' ? image.split('/').pop() : null;
 
-    // Gửi yêu cầu xóa ảnh sản phẩm trước khi xóa sản phẩm
-    fetch(`http://localhost:3000/product/delete/${imageFilename}`, {
-      method: 'DELETE',
-    })
-      .then((res) => res.json())
-      .then(() => {
-        // Sau khi xóa ảnh, xóa sản phẩm trong cơ sở dữ liệu
-        fetch(`http://localhost:9999/products/${id}`, {
-          method: 'DELETE',
-        })
-          .then(() => {
-            setProducts(products.filter((p) => p.id !== id));
-            alert('Product and image deleted successfully!');
-          })
-          .catch(() => alert('Delete product failed'));
+    if (imageFilename) {
+      // Gửi yêu cầu xóa ảnh sản phẩm trước khi xóa sản phẩm
+      fetch(`http://localhost:3000/product/delete/${imageFilename}`, {
+        method: 'DELETE',
       })
-      .catch(() => alert('Delete image failed'));
+        .then((res) => res.json())
+        .then(() => {
+          // Sau khi xóa ảnh, xóa sản phẩm trong cơ sở dữ liệu
+          fetch(`http://localhost:9999/products/${id}`, {
+            method: 'DELETE',
+          })
+            .then(() => {
+              setProducts(products.filter((p) => p.id !== id));
+              showToast('Product deleted successfully!', 'success');
+            })
+            .catch(() => alert('Delete product failed'));
+        })
+        .catch(() => alert('Delete image failed'));
+    } else {
+      // Nếu không có ảnh, chỉ xóa sản phẩm
+      fetch(`http://localhost:9999/products/${id}`, {
+        method: 'DELETE',
+      })
+        .then(() => {
+          setProducts(products.filter((p) => p.id !== id));
+          showToast('Product deleted successfully!', 'success');
+        })
+        .catch(() => alert('Delete product failed'));
+    }
   };
 
 
@@ -221,7 +272,8 @@ const ProductManagement = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container ">
+
       <button className="add-btn" onClick={() => setShowModal(true)}>Add Product</button>
 
       <div className="filter-controls m-5">
@@ -296,33 +348,43 @@ const ProductManagement = () => {
         <p>No products found.</p>
       ) : (
         <table>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Description</th>
-              <th>Price</th>
-              <th>Category</th>
-              <th>Status</th>
-              <th>Quantity</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentProducts.map((product) => (
-              <tr key={product.id}>
-                <td>{product.title}</td>
-                <td>{product.description}</td>
-                <td>${product.price}</td>
-                <td>{getCategoryName(product.categoryId)}</td>
-                <td>{product.status}</td>
-                <td>{product.quantity}</td>
-                <td>
-                  <button className="edit" onClick={() => handleEdit(product)}>Edit</button>
-                  <button className="delete" onClick={() => handleDelete(product.id, product.image)}>Delete</button>
-                </td>
+          <div className=''>
+            <thead>
+              <tr>
+                <th>Image</th> {/* Thêm cột Image */}
+                <th>Title</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Quantity</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
+            </thead>
+            <tbody>
+              {currentProducts.map((product) => (
+                <tr key={product.id}>
+                  <td>
+                    <img
+                      src={product.url} // Sử dụng product.url thay vì product.image
+                      alt={product.title}
+                      style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                    />
+                  </td> {/* Hiển thị ảnh */}
+                  <td>{product.title}</td>
+                  <td>{product.description}</td>
+                  <td>${product.price}</td>
+                  <td>{getCategoryName(product.categoryId)}</td>
+                  <td>{product.status}</td>
+                  <td>{product.quantity}</td>
+                  <td>
+                    <button className="edit" onClick={() => handleEdit(product)}>Edit</button>
+                    <button className="delete" onClick={() => handleDelete(product.id, product.image)}>Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </div>
         </table>
       )}
 
