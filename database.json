@@ -1412,9 +1412,12 @@
       "name": "Chào mừng đến với Đại Học FPT",
       "discountType": "percentage",
       "discountValue": 10,
-      "startDate": "2025-04-03",
-      "endDate": "2025-05-16",
-      "isActive": true
+      "startDate": "2025-06-27",
+      "endDate": "2026-08-29",
+      "isActive": true,
+      "productIds": [
+        "5"
+      ]
     },
     {
       "id": "2",

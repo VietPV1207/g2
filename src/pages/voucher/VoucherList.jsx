@@ -5,9 +5,11 @@ import { Modal } from 'bootstrap';
 import './VoucherList.css'; 
 
 const API_URL = 'http://localhost:9999/voucher';
+const PRODUCTS_URL = 'http://localhost:9999/products';
 
 const VoucherList = () => {
   const [vouchers, setVouchers] = useState([]);
+  const [products, setProducts] = useState([]);
   const [form, setForm] = useState({
     id: null,
     code: '',
@@ -16,16 +18,32 @@ const VoucherList = () => {
     discountValue: '',
     startDate: '',
     endDate: '',
-    isActive: true
+    isActive: true,
+    productIds: []
   });
   const [formErrors, setFormErrors] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(API_URL)
-      .then(res => res.json())
-      .then(data => setVouchers(data))
-      .catch(err => console.error('Fetch error:', err));
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const [vouchersResponse, productsResponse] = await Promise.all([
+          fetch(API_URL).then(res => res.json()),
+          fetch(PRODUCTS_URL).then(res => res.json())
+        ]);
+        
+        setVouchers(vouchersResponse);
+        setProducts(Array.isArray(productsResponse) ? productsResponse : [productsResponse]);
+      } catch (err) {
+        console.error('Data fetch error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const formatDate = (dateString) => new Date(dateString).toLocaleDateString('en-US');
@@ -52,6 +70,11 @@ const VoucherList = () => {
     if (name === 'startDate' || name === 'endDate') {
       validateDates(name, value, form);
     }
+  };
+
+  const handleProductSelectChange = (e) => {
+    const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
+    setForm(prev => ({ ...prev, productIds: selectedOptions }));
   };
 
   const validateDates = (fieldName, value, currentForm) => {
@@ -102,6 +125,7 @@ const VoucherList = () => {
     if (!form.discountValue) errors.discountValue = 'Discount value is required';
     if (!form.startDate) errors.startDate = 'Start date is required';
     if (!form.endDate) errors.endDate = 'End date is required';
+    if (!form.productIds || form.productIds.length === 0) errors.productIds = 'Please select at least one product';
 
     // Validate start date not in past
     if (form.startDate) {
@@ -133,7 +157,8 @@ const VoucherList = () => {
       discountValue: '',
       startDate: '',
       endDate: '',
-      isActive: true
+      isActive: true,
+      productIds: []
     });
     setFormErrors({});
     setIsEditMode(false);
@@ -185,7 +210,13 @@ const VoucherList = () => {
   };
 
   const handleEdit = (voucher) => {
-    setForm(voucher);
+    // Ensure productIds is an array
+    const productIds = voucher.productIds || [];
+    
+    setForm({
+      ...voucher,
+      productIds
+    });
     setIsEditMode(true);
     setFormErrors({});
     const modal = new Modal(document.getElementById('voucherModal'));
@@ -205,13 +236,25 @@ const VoucherList = () => {
     }
   };
 
+  // Helper function to get product titles for a voucher
+  const getProductTitles = (productIds) => {
+    if (!productIds || productIds.length === 0) return 'No products selected';
+    
+    return productIds.map(id => {
+      const product = products.find(p => p.id === id);
+      return product ? product.title : `Product #${id}`;
+    }).join(', ');
+  };
+
+  if (loading) {
+    return <div className="text-center p-5">Loading vouchers and products...</div>;
+  }
 
   return (
-    
     <div className="voucher-container">
       <h1 className="voucher-header">Voucher Management</h1>
       <button
-        className="btn btn-primary"
+        className="btn btn-primary mb-3"
         onClick={() => {
           resetForm();
           const modal = new Modal(document.getElementById('voucherModal'));
@@ -220,7 +263,6 @@ const VoucherList = () => {
       >
         Add Voucher
       </button>
-
 
       {/* Modal */}
       <div className="modal fade" id="voucherModal" tabIndex="-1" aria-labelledby="voucherModalLabel" aria-hidden="true">
@@ -315,6 +357,27 @@ const VoucherList = () => {
                     />
                     {formErrors.endDate && <div className="invalid-feedback">{formErrors.endDate}</div>}
                   </div>
+
+                  <div className="col-12">
+                    <label className="form-label">Applicable Products</label>
+                    <select
+                      name="productIds"
+                      className={`form-select ${formErrors.productIds ? 'is-invalid' : ''}`}
+                      multiple
+                      value={form.productIds}
+                      onChange={handleProductSelectChange}
+                      style={{ height: '120px' }}
+                      required
+                    >
+                      {products.map(product => (
+                        <option key={product.id} value={product.id}>
+                          {product.title} - ${product.price}
+                        </option>
+                      ))}
+                    </select>
+                    <small className="text-muted">Hold Ctrl/Cmd to select multiple products</small>
+                    {formErrors.productIds && <div className="invalid-feedback">{formErrors.productIds}</div>}
+                  </div>
                 </div>
               </div>
 
@@ -331,18 +394,18 @@ const VoucherList = () => {
         </div>
       </div>
 
-
       {/* Table */}
-      <table className="voucher-table">
-        <thead>
+      <table className="table table-striped table-bordered mt-4">
+        <thead className="table-primary">
           <tr>
-            <th className="table-header">Code</th>
-            <th className="table-header">Name</th>
-            <th className="table-header">Discount</th>
-            <th className="table-header">Start Date</th>
-            <th className="table-header">End Date</th>
-            <th className="table-header">Status</th>
-            <th className="table-header">Actions</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Discount</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Status</th>
+            <th>Products</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -351,31 +414,43 @@ const VoucherList = () => {
             const start = new Date(v.startDate);
             const end = new Date(v.endDate);
             const status = now < start ? 'Pending' : now > end ? 'Expired' : 'Active';
-            const statusClass = status === 'Active' ? 'status-active' : status === 'Expired' ? 'status-expired' : 'status-pending';
+            const statusClass = status === 'Active' ? 'bg-success' : status === 'Expired' ? 'bg-danger' : 'bg-warning text-dark';
 
             return (
               <tr key={v.id}>
-                <td className="table-cell">{v.code}</td>
-                <td className="table-cell">{v.name}</td>
-                <td className="table-cell">{v.discountType === 'percentage' ? `${v.discountValue}%` : `$${v.discountValue}`}</td>
-                <td className="table-cell">{formatDate(v.startDate)}</td>
-                <td className="table-cell">{formatDate(v.endDate)}</td>
-                <td className="table-cell">
-                  <span className={`status-badge ${statusClass}`}>
+                <td>{v.code}</td>
+                <td>{v.name}</td>
+                <td>{v.discountType === 'percentage' ? `${v.discountValue}%` : `$${v.discountValue}`}</td>
+                <td>{formatDate(v.startDate)}</td>
+                <td>{formatDate(v.endDate)}</td>
+                <td>
+                  <span className={`badge ${statusClass}`}>
                     {status}
                   </span>
                 </td>
-                <td className="table-cell actions-cell">
-                  <button className="btn-edit" onClick={() => handleEdit(v)}>
-                    Edit
-                  </button>
-                  <button className="btn-delete" onClick={() => deleteVoucher(v.id)}>
-                    Delete
-                  </button>
+                <td>
+                  <div style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }} title={getProductTitles(v.productIds)}>
+                    {getProductTitles(v.productIds)}
+                  </div>
+                </td>
+                <td>
+                  <div className="d-flex gap-2">
+                    <button className="btn btn-sm btn-warning" onClick={() => handleEdit(v)}>
+                      Edit
+                    </button>
+                    <button className="btn btn-sm btn-danger" onClick={() => deleteVoucher(v.id)}>
+                      Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             );
           })}
+          {vouchers.length === 0 && (
+            <tr>
+              <td colSpan="8" className="text-center py-3">No vouchers found</td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>
